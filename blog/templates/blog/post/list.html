@@ -12,4 +12,21 @@
     </p>
     {{ post.body|truncatewords:30|linebreaks }}
   {% endfor %}
+
+  <div>
+      <span>
+        {% if posts.has_previous %}
+          <a href="?page={{ posts.previous_page_number }}">Previous</a>
+        {% endif %}
+      </span>
+      <span>
+          Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+      </span>
+      <span>
+          {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">Next</a>
+          {% endif %}
+      </span>
+ </div>
+
 {% endblock %}
