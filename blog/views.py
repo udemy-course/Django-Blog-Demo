@@ -1,12 +1,17 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from taggit.models import Tag
 
 from .models import Post, Comment
 from .forms import CommentForm
 
 
-def post_list(request):
-    post_list = Post.objects.all()
+def post_list(request, tag_slug=None):
+    if tag_slug:
+        tag = Tag.objects.filter(slug=tag_slug).first()
+        post_list = Post.objects.filter(tags__in=[tag])
+    else:
+        post_list = Post.objects.all()
     paginator = Paginator(post_list, 3)
     page = request.GET.get('page')
     try:
