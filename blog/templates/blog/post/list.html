@@ -10,6 +10,11 @@
     <p>
       Published {{ post.publish }} by {{ post.author }}
     </p>
+    {% if post.tags.count %}
+    <p>
+      Tags {{ post.tags.all|join:', '}}
+    </p>
+    {% endif %}
     {{ post.body|truncatewords:30|linebreaks }}
   {% endfor %}
 
