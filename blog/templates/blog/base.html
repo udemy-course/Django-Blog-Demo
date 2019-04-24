@@ -1,0 +1,12 @@
+<html>
+<body>
+    <h1><a href="{% url "blog:post_list" %}">My Blog</a></h1>
+    <hr>
+    {% block content %}
+    {% endblock %}
+    <div>
+        <hr>    
+        <p>&copy; 2018-<script type="text/javascript">document.write(new Date().getFullYear());</script> by Peng Xiao. All rights reserved. <a href="mailto:xiaoquwl _at_ gmail _dot_ com">Questions?</a></p>
+    </div>
+</body>  
+</html>

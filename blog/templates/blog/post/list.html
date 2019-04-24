@@ -1,7 +1,7 @@
+{% extends "blog/base.html" %}
 
 {% block content %}
-  <h1><a href="{% url "blog:post_list" %}">My Blog</a></h1>
-  <hr>
+
 
   {% for post in posts %}
     <h2>
