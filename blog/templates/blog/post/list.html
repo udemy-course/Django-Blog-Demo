@@ -40,4 +40,15 @@
       </span>
  </div>
 
+ <hr>
+ <div>
+  <ul>
+    {% for tag in tag_list %}
+      <li>
+        <a href="{% url "blog:post_list_by_tag" tag.slug %}">{{ tag.name }}</a>
+        ({{ tag.taggit_taggeditem_items.count }})</li>
+    {% endfor %}
+  </ul>
+ </div>
+
 {% endblock %}
