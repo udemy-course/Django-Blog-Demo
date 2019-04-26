@@ -1,4 +1,6 @@
 <html>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <body>
     <h1><a href="{% url "blog:post_list" %}">My Blog</a></h1>
     <hr>
