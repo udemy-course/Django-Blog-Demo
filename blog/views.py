@@ -52,6 +52,7 @@ def post_detail(request, year, month, day, slug):
             new_comment.save()
     else:
         comment_form = CommentForm()
+    tag_list = Tag.objects.all()
     return render(
         request,
         'blog/post/detail.html',
@@ -59,6 +60,7 @@ def post_detail(request, year, month, day, slug):
             'post': post,
             'comments': comments,
             'new_comment': new_comment,
-            'comment_form': comment_form
+            'comment_form': comment_form,
+            'tag_list': tag_list
         }
     )

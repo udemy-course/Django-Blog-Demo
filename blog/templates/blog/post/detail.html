@@ -2,51 +2,70 @@
 
 {% block content %}
 
-<h1>
-    {{ post.title }}
-</h1>
-<p>
-Published {{ post.publish }} by {{ post.author }}
-</p>
-{{ post.body|linebreaks }}
+<div class="post">
+    <p class="date"><span class="flask-moment" data-timestamp="{{ post.publish }}" data-format="format('LL')"
+            data-refresh="0">{{ post.publish }}</span></p>
+    <h1 class="post-title"><a href="{{ post.get_url }}">{{ post.title }}</a></h1>
+    <div class="posted">Posted by <span class="label label-danger">{{ post.author }}</span>
+        {% if post.tags.count %}
+        tags
+        {% for tag in post.tags.all %}
+        <span class="label label-primary"><a href="{% url "blog:post_list_by_tag" tag.slug %}">{{ tag.name }}</a></span>
+        {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="post_body">
+        <p>{{ post.body|linebreaks }}</p>
+    </div>
 
-<h2>Similar posts</h2>
-{% for post in post.tags.similar_objects %}
+
+    <!-- <h2>Similar posts</h2>
+    {% for post in post.tags.similar_objects %}
     <p>
         <a href="{{ post.get_url }}">{{ post.title }}</a>
     </p>
-   {% empty %}
-     There are no similar posts yet.
-{% endfor %}
-<hr>
+    {% empty %}
+    There are no similar posts yet.
+    {% endfor %}
+    <hr> -->
+    {% with comments.count as total_comments %}
+    <h4 style="text-align: right"><a name="comments"></a> {{ total_comments }} comment{{ total_comments|pluralize }}
+    </h4>
+    {% endwith %}
+    <div class="comment">
+        <ul>
+            {% for comment in comments %}
+            <li>
+                <div class="comment-thumbnail"><img
+                        src="{{ comment.avatar }}" /></div>
+                <div class="comment-body">
+                    <p>
+                        <span class="label label-default">#{{ forloop.counter }}</span> <span class="label label-primary">{{ comment.username }}</span> said
+                        <span class="flask-moment">{{ comment.created }}</span>
+                    </p>
+                    <div style="overflow: auto;">
+                        <p style="white-space: pre-wrap;"> {{ comment.body }}</p>
+                    </div>
+                </div>
+            </li> 
+            {% empty %}
+            <p>There are no comments yet.</p>
+            {% endfor %}
+        </ul>
 
-{% with comments.count as total_comments %}
-    <h2>
-        {{ total_comments }} comment{{ total_comments|pluralize }}
-    </h2>
-{% endwith %}
 
-{% for comment in comments %}
-    <div>
-        <p>
-            Comment by {{ comment.username }} {{ comment.created }}
-        </p>
-       {{ comment.body|linebreaks }}
+        {% if new_comment %}
+        <h2>Your comment has been added.</h2>
+        {% else %}
+        <h3><a name="commentform"></a>Leave a Comment</h3>
+        <form action="#commentform" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Add comment"></p>
+        </form>
+        {% endif %}
+
     </div>
-   {% empty %}
-     <p>There are no comments yet.</p>
-{% endfor %}
-
-
-{% if new_comment %}
-    <h2>Your comment has been added.</h2>
-{% else %}
-    <h2>Add a new comment</h2>
-    <form action="." method="post">
-       {{ comment_form.as_p }}
-       {% csrf_token %}
-    <p><input type="submit" value="Add comment"></p>
-    </form>
-{% endif %}
-
+</div>
 {% endblock %}

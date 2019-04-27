@@ -1,3 +1,5 @@
+from hashlib import md5
+
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -65,3 +67,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'Comment by {} on {}'.format(self.username, self.post)
+
+    def avatar(self, size=60):
+        md5_digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            md5_digest, size)

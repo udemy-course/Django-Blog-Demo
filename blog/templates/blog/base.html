@@ -1,14 +1,126 @@
 <html>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+{% load static %}
+
+<head>
+    <title>
+        pengxiao.io
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/prettify.css' %}" type="text/css" rel="stylesheet" />
+    <link href="{% static 'css/colorbox.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" />
+</head>
+
 <body>
-    <h1><a href="{% url "blog:post_list" %}">My Blog</a></h1>
-    <hr>
-    {% block content %}
-    {% endblock %}
-    <div>
-        <hr>    
-        <p>&copy; 2018-<script type="text/javascript">document.write(new Date().getFullYear());</script> by Peng Xiao. All rights reserved. <a href="mailto:xiaoquwl _at_ gmail _dot_ com">Questions?</a></p>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/blog">pengxiao.io</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/blog/">Home</a></li>
+                        <li><a href="/blog/about-me">About Me</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a href="http://github.com/xiaopeng163"><img src="{% static 'picture/github.png' %}"
+                                        alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/xiaopeng163"><img src="{% static 'picture/twitter.png' %}"
+                                        alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div id="main">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="col-md-4 sidebar-bg">
+                <div id="sidebar">
+
+                    <h1>About Peng Xiao</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;"
+                        src="{% static 'picture/pengxiao.jpg' %}" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a Network DevOps Engineer, Online instructor, currently living in The Hague, Netherlands.</p>
+
+                    <p>You can also find me on <a href="https://github.com/xiaopeng163">Github</a> and <a
+                            href="https://twitter.com/xiaopeng163">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+                    <h1>Tags</h1>
+                    <ul>
+                        {% for tag in tag_list %}
+                        <li>
+                            <span class="label label-primary"><a href="{% url "blog:post_list_by_tag" tag.slug %}">{{ tag.name }}</a></span>
+                            ({{ tag.taggit_taggeditem_items.count }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p>&copy; 2018-
+                <script type="text/javascript">document.write(new Date().getFullYear());</script> by Peng Xiao. All
+                rights reserved. <a href="mailto:xiaoquwl _at_ gmail _dot_ com">Questions?</a></p>
+        </div>
     </div>
-</body>  
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.colorbox-min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/prettify.js' %}"></script>
+    <script src="{% static 'js/moment-with-langs.min.js' %}"></script>
+    <script>
+        function flask_moment_render(elem) {
+            $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+            $(elem).removeClass('flask-moment');
+        }
+        function flask_moment_render_all() {
+            $('.flask-moment').each(function () {
+                flask_moment_render(this);
+                if ($(this).data('refresh')) {
+                    (function (elem, interval) { setInterval(function () { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+                }
+            })
+        }
+        $(document).ready(function () {
+            flask_moment_render_all();
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".gallery").colorbox({ rel: ".gallery", maxWidth: "95%", maxHeight: "95%", scalePhotos: true });
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function () {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+</body>
+
 </html>
